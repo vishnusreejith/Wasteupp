@@ -818,6 +818,7 @@ const ChatAnalystTab = ({ preloadPrompt, setPreloadPrompt }) => {
  * Main App Component
  */
 export default function App() {
+  const { useState, useEffect } = React;
   const [activeTab, setActiveTab] = useState("chat"); // 'chat', 'data', 'about'
   const [chatPreload, setChatPreload] = useState(""); // State for preloading chat
 

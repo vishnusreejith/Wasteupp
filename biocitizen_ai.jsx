@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+// We get React from the <script> tag in index.html, not an import
+// This is the main fix for the "useState is undefined" error
+const { useState, useEffect, useCallback, useRef } = React;
 
 // --- Helper Functions ---
 
@@ -524,14 +526,16 @@ const DataUploaderTab = ({ setChatPreload, setActiveTab }) => {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold text-green-700">Extracted Data</h3>
-              <a
-                href={downloadUrl}
-                download={`${fileName.split('.')[0]}_data.json`}
-                className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg shadow hover:bg-blue-700 transition-colors"
-              >
-                <IconDownload />
-                <span className="ml-1.5">Download Data (JSON)</span>
-              </a>
+              {downloadUrl && (
+                <a
+                  href={downloadUrl}
+                  download={`${fileName.split('.')[0]}_data.json`}
+                  className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg shadow hover:bg-blue-700 transition-colors"
+                >
+                  <IconDownload />
+                  <span className="ml-1.5">Download Data (JSON)</span>
+                </a>
+              )}
             </div>
             <div className="max-h-[500px] overflow-auto border border-gray-200 rounded-lg shadow">
               <table className="w-full min-w-max text-sm text-left text-gray-700">
@@ -554,7 +558,7 @@ const DataUploaderTab = ({ setChatPreload, setActiveTab }) => {
                       ))}
                     </tr>
                   ))}
-                </tbody>
+</tbody>
               </table>
             </div>
           </div>
@@ -577,7 +581,7 @@ const ChatAnalystTab = ({ preloadPrompt, setPreloadPrompt }) => {
   const [userInput, setUserInput] = useState("");
   const [uploadedImage, setUploadedImage] = useState(null); // { data, mimeType, previewUrl }
   const [isLoading, setIsLoading] = useState(false);
-  const chatEndRef = React.useRef(null);
+  const chatEndRef = useRef(null);
 
   // Scroll to bottom of chat
   useEffect(() => {
@@ -739,6 +743,7 @@ const ChatAnalystTab = ({ preloadPrompt, setPreloadPrompt }) => {
                   className="rounded-lg mb-2 max-h-48"
                 />
               )}
+              {/* This fixes the "Unexpected token" error I introduced earlier */}
               <p className="whitespace-pre-wrap">{message.text}</p>
             </div>
           </div>
@@ -817,8 +822,9 @@ const ChatAnalystTab = ({ preloadPrompt, setPreloadPrompt }) => {
 /**
  * Main App Component
  */
-export default function App() {
-  const { useState, useEffect } = React;
+// The "export default" is for modules. Since we're not using modules,
+// we just define a normal function. The index.html file will find 'App'.
+function App() {
   const [activeTab, setActiveTab] = useState("chat"); // 'chat', 'data', 'about'
   const [chatPreload, setChatPreload] = useState(""); // State for preloading chat
 
@@ -855,6 +861,7 @@ export default function App() {
   useEffect(() => {
     if (typeof window.Papa === 'undefined') {
       console.warn("PapaParse library (papaparse.min.js) is not loaded. CSV uploading will not work.");
+      // You could also set an error state here to show in the UI
     }
   }, []);
 
@@ -868,7 +875,7 @@ export default function App() {
           </h1>
           <p className="text-lg md:text-xl text-green-600 mt-2">
             Your AI-Powered Biodiversity Assessment Tool
-          </p>
+          </pre>
         </header>
 
         {/* Navigation */}

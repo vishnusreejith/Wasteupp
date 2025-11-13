@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BioCitizen AI</title>
+    
     <!-- 1. Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -11,32 +12,33 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     
-    <!-- 3. Load Babel (to read JSX) -->
+    <!-- 3. Load Babel (This is what "runs" your JSX) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <!-- 4. Load PapaParse (for CSVs) -->
+    <!-- 4. Load PapaParse (Required for the .jsx app to read CSVs) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/papaparse/5.4.1/papaparse.min.js"></script>
     
     <style>
-      /* Simple font setup */
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
       body {
         font-family: 'Inter', sans-serif;
+        background-color: #f9fafb;
       }
     </style>
   </head>
-  <body class="bg-gray-100">
-    <!-- This is where your React app will be rendered -->
+  <body>
+    <!-- This is the empty 'root' div where your React app will be injected -->
     <div id="root"></div>
 
-    <!-- 5. Load your React App Component (MUST be type="text/babel") -->
+    <!-- 5. Load your React App Component -->
     <script type="text/babel" src="biocitizen_ai.jsx"></script>
 
-    <!-- 6. Mount your App to the 'root' div -->
+    <!-- 6. Mount your App to the 'root' div (Using the new React 18 API) -->
     <script type="text/babel">
-      ReactDOM.render(
-        React.createElement(App),
-        document.getElementById('root')
-      );
+      // Use the new React 18 'createRoot' API (this fixes the warning)
+      const container = document.getElementById('root');
+      const root = ReactDOM.createRoot(container);
+      root.render(React.createElement(App));
     </script>
   </body>
 </html>
